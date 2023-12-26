@@ -26,6 +26,7 @@ const AllLetters = () => {
   const [fromDepartment, setFromDepartment] = useState(null)
   const [toDepartment, setToDepartment] = useState(null)
   const [user, setUser] = useState(null)
+  const [letterNoSearch, setLetterNoSearch] = useState(false)
 
   const {
     isSuccess,
@@ -235,7 +236,7 @@ const AllLetters = () => {
       <table className="max-h-60 w-full border-collapse overflow-y-scroll bg-white font-sans">
         <thead>
           <tr className="bg-yellow-200">
-            <th className="w-[10%] border border-gray-400 px-2 py-1">Məktubun &#8470;</th>
+            <th className="w-[9%] border border-gray-400 px-2 py-1">Məktubun &#8470;</th>
             <th className="w-[6%] border border-gray-400 px-2 py-1">Haradan</th>
             <th className="w-[6%] border border-gray-400 px-2 py-1">Hara</th>
             <th className="w-[8%] border border-gray-400 px-2 py-1">Mühümlük</th>
