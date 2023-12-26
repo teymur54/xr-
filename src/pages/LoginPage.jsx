@@ -53,7 +53,7 @@ const LoginPage = () => {
       {!isVerifying && !auth?.isAuth && (
         <div className="flex h-full w-full items-center justify-center">
           <form
-            className="flex w-1/2 flex-col rounded-xl bg-darkblue-700 p-6 text-white"
+            className="flex w-96 flex-col rounded-2xl bg-darkblue-700 p-6 text-white"
             onSubmit={handleSubmit}
           >
             <h2 className="mb-8 self-center text-2xl font-bold">Xüsusi Rabitə Şöbəsi</h2>
@@ -90,7 +90,7 @@ const LoginPage = () => {
             </div>
             <button
               disabled={signInMutation.isPending}
-              className="btn mt-5 w-36 self-center py-2"
+              className="btn mt-5 w-full self-center py-2"
               type="submit"
             >
               {signInMutation.isPending ? 'Loading...' : <LoginIcon />}

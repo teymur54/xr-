@@ -58,6 +58,19 @@ export const getAllDepartments = async (token) => {
   }
 }
 
+export const getAllDegrees = async (token) => {
+  try {
+    const response = await instance.get('/v1/degrees', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error fetching importance degrees:', error)
+  }
+}
+
 export const getAllLetters = async (token, pageSize = 10, pageNumber = 0, sortBy = 'date') => {
   try {
     const response = await instance.get('/v1/letters', {
@@ -173,6 +186,20 @@ export const getLettersCreatedBy = async (
     return response.data
   } catch (error) {
     console.error('Error fetching letters created by a user:', error)
+    throw error
+  }
+}
+
+export const getAllUsers = async (token) => {
+  try {
+    const response = await instance.get('/auth/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error fetching all users:', error)
     throw error
   }
 }

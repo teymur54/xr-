@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createLetter, getAllDepartments } from '../api/axiosApi'
+import { createLetter, getAllDegrees, getAllDepartments } from '../api/axiosApi'
 import Select from 'react-select'
 import toast from 'react-hot-toast'
 import '../styles/tailwind.css'
@@ -15,8 +15,8 @@ const PostLetter = () => {
   const [letterNo, setLetterNo] = useState('')
   const [fromDepartment, setFromDepartment] = useState(null)
   const [toDepartment, setToDepartment] = useState(null)
-  const [importanceDegree, setImportanceDegree] = useState(null)
-  const [envelope, setEnvelope] = useState(null)
+  const [degree, setDegree] = useState(null)
+  const [envelope, setEnvelope] = useState({ value: '1', label: 1 })
   const [date, setDate] = useState('')
   const [note, setNote] = useState('')
 
@@ -38,13 +38,21 @@ const PostLetter = () => {
     staleTime: 1000 * 60 * 5,
   })
 
+  const { data: degrees } = useQuery({
+    queryKey: ['degrees', jwtToken],
+    queryFn: () => getAllDegrees(jwtToken),
+    enabled: !!jwtToken,
+    staleTime: 1000 * 60 * 5,
+  })
+
   const resetForm = () => {
     setLetterNo('')
     setDate('')
     setNote('')
+    setEnvelope({ value: '1', label: 1 })
     setFromDepartment(null)
     setToDepartment(null)
-    setImportanceDegree(null)
+    setDegree(null)
   }
 
   const handleSubmit = (event) => {
@@ -57,7 +65,9 @@ const PostLetter = () => {
       toDepartment: {
         id: Number(toDepartment.value),
       },
-      importanceDegree: importanceDegree.value,
+      importanceDegree: {
+        id: Number(degree.value),
+      },
       envelope: Number(envelope),
       date,
       note,
@@ -86,7 +96,7 @@ const PostLetter = () => {
 
   return (
     <>
-      <div className="mb-4 ml-6 mt-4 flex-1 rounded-2xl border border-gray-400 bg-gradient-to-r from-gray-300 to-gray-100 px-6 py-4">
+      <div className="w-300 mb-4 ml-6 mt-4 rounded-2xl border-2 border-solid border-darkblue-800 bg-gradient-to-r from-gray-300 to-gray-100 px-6 py-4 shadow-lg">
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label>
             <span className="font-bold">Məktub &#8470;:</span>
@@ -129,13 +139,9 @@ const PostLetter = () => {
           <label>
             <span className="font-bold">Mühümlük dərəcəsi:</span>
             <Select
-              value={importanceDegree}
-              onChange={setImportanceDegree}
-              options={[
-                { value: 'mexfi', label: 'mexfi' },
-                { value: 'tam-mexfi', label: 'tam-mexfi' },
-                { value: 'xususi-ehemiyyetli', label: 'xususi-ehemiyyetli' },
-              ]}
+              value={degree}
+              onChange={setDegree}
+              options={degrees?.map((degree) => ({ value: degree.id, label: degree.name }))}
               required
               placeholder="Mühümlük"
               noOptionsMessage={() => 'Yanlış seçim'}
@@ -175,11 +181,10 @@ const PostLetter = () => {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               rows={7}
-              required
             />
           </label>
           <button
-            className="w-1/3 rounded-lg bg-red-500 px-4 py-2 text-lg text-white hover:bg-red-600"
+            className="w-24 rounded-lg bg-red-500 px-4 py-2 text-lg text-white hover:bg-red-600"
             type="submit"
           >
             Təsdiqlə
