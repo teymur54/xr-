@@ -13,6 +13,7 @@ import {
 import useDebounce from '../hooks/useDebounce'
 import { useQuery } from '@tanstack/react-query'
 import Select from 'react-select'
+import { DeleteXIcon } from '../assets/HeroIcons'
 
 const AllLetters = () => {
   const { auth } = useAuth()
@@ -174,7 +175,7 @@ const AllLetters = () => {
               onClick={() => setLetterNoSearch('')}
               className="ml-4 rounded-lg border border-gray-500 bg-red-500 px-2 text-white"
             >
-              Sil
+              <DeleteXIcon />
             </button>
           </div>
         )}
@@ -186,7 +187,7 @@ const AllLetters = () => {
               onClick={() => setSearch('')}
               className="ml-4 rounded-lg border border-gray-500 bg-red-500 px-2 text-white"
             >
-              Sil
+              <DeleteXIcon />
             </button>
           </div>
         )}
@@ -212,9 +213,9 @@ const AllLetters = () => {
                 setFromDepartment(null)
                 setSearch('')
               }}
-              className="ml-2 rounded-lg border border-gray-500 bg-red-500 px-2 text-white"
+              className="text-md ml-2 rounded-[20px] border-2 border-darkblue-400 bg-red-500 px-1 py-1 text-white"
             >
-              Sil
+              <DeleteXIcon />
             </button>
           </div>
         )}
@@ -240,9 +241,9 @@ const AllLetters = () => {
                 setToDepartment(null)
                 setSearch('')
               }}
-              className="ml-2 rounded-lg border border-gray-500 bg-red-500 px-2 text-white"
+              className="text-md ml-2 rounded-[20px] border-2 border-darkblue-400 bg-red-500 px-1 py-1 text-white"
             >
-              Sil
+              <DeleteXIcon />
             </button>
           </div>
         )}
@@ -268,9 +269,9 @@ const AllLetters = () => {
                 setUser(null)
                 setSearch('')
               }}
-              className="ml-2 rounded-lg border border-gray-500 bg-red-500 px-2 text-white"
+              className="text-md ml-2 rounded-[20px] border-2 border-darkblue-400 bg-red-500 px-1 py-1 text-white"
             >
-              Sil
+              <DeleteXIcon />
             </button>
           </div>
         )}
@@ -315,7 +316,7 @@ const AllLetters = () => {
                   <td className="border border-gray-400 px-1 py-0">{letter.note}</td>
                 </tr>
               ))}
-            {!letterNoSearch && !letters?.content?.length && (
+            {!isLoading && !letterNoSearch && !letters?.content?.length && (
               <tr>
                 <td>Tapilmadi</td>
               </tr>

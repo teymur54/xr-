@@ -2,7 +2,6 @@ import toast from 'react-hot-toast'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { LogoutIcon } from '../assets/HeroIcons'
 import { useAuth } from '../context/AuthContext'
-import { FaHome } from 'react-icons/fa'
 
 const Sidebar = () => {
   const { logout, auth } = useAuth()
@@ -18,7 +17,6 @@ const Sidebar = () => {
 
       <nav className="flex w-full flex-col">
         <NavLink end to="/" className={({ isActive }) => (isActive ? 'active-nav-element' : 'nav-element')}>
-          <FaHome />
           Əsas səhifə
         </NavLink>
         <NavLink
