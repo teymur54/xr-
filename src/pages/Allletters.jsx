@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 import {
@@ -36,9 +36,7 @@ const AllLetters = () => {
   } = useQuery({
     queryKey: ['lettersData', pageSize, pageNumber, sortBy, debouncedSearch, apiCall],
     queryFn: () => {
-      if (apiCall === 'number' && search !== '') {
-        return getLetterByNumber(search, jwtToken)
-      } else if (apiCall === 'time' && search !== '') {
+      if (apiCall === 'time' && search !== '') {
         return getLettersByDate(search, pageSize, pageNumber, sortBy, jwtToken)
       } else if (apiCall === 'from' && search !== '') {
         return getLettersFrom(search, pageSize, pageNumber, sortBy, jwtToken)
@@ -66,6 +64,12 @@ const AllLetters = () => {
     queryFn: () => getAllUsers(jwtToken),
     enabled: !!jwtToken,
     staleTime: 1000 * 60 * 5,
+  })
+
+  const { data: letterByNo } = useQuery({
+    queryKey: ['letters', jwtToken, letterNoSearch],
+    queryFn: () => getLetterByNumber(letterNoSearch, jwtToken),
+    enabled: !!letterNoSearch,
   })
 
   const departmentOptions = departments?.map((department) => ({
@@ -106,6 +110,11 @@ const AllLetters = () => {
     setApiCall(selectedValue)
   }
 
+  const handleSortChange = (event) => {
+    setSortBy(event.target.value)
+    setPageNumber(0)
+  }
+
   return (
     <div className="mb-4 ml-6 mr-5 mt-4 flex-grow rounded-2xl border-2 border-darkblue-900 bg-gradient-to-r from-gray-300 to-gray-100 py-5 shadow-lg">
       <div className="mb-1 border-b-2 border-gray-300 pb-1">
@@ -142,8 +151,13 @@ const AllLetters = () => {
         {apiCall === 'number' && (
           <span>
             Letters &#8470;
-            <input type="number" value={search} placeholder="search" onChange={handleSearchİnputChange} />
-            <button onClick={() => setSearch('')}>Clear</button>
+            <input
+              type="number"
+              value={letterNoSearch}
+              placeholder="enter number"
+              onChange={(e) => setLetterNoSearch(e.target.value.replace(/\D/g, ''))}
+            />
+            <button onClick={() => setLetterNoSearch('')}>Clear</button>
           </span>
         )}
         {apiCall === 'time' && (
@@ -231,6 +245,11 @@ const AllLetters = () => {
             </button>
           </span>
         )}
+        Sort by
+        <select value={sortBy} onChange={handleSortChange}>
+          <option value="letterNo">Letter number</option>
+          <option value="date">Date</option>
+        </select>
       </div>
 
       <table className="max-h-60 w-full border-collapse overflow-y-scroll bg-white font-sans">
@@ -246,7 +265,8 @@ const AllLetters = () => {
           </tr>
         </thead>
         <tbody>
-          {letters && letters?.content?.length > 0 ? (
+          {!letterNoSearch &&
+            letters?.content?.length &&
             letters?.content?.map((letter, index) => (
               <tr key={index}>
                 <td className="border border-gray-400 px-1 py-0">{letter.letterNo}</td>
@@ -259,10 +279,24 @@ const AllLetters = () => {
                 <td className="border border-gray-400 px-1 py-0">{letter.date}</td>
                 <td className="border border-gray-400 px-1 py-0">{letter.note}</td>
               </tr>
-            ))
-          ) : (
+            ))}
+          {!letterNoSearch && !letters?.content?.length && (
             <tr>
-              <td>No employees found.</td>
+              <td>Tapilmadi</td>
+            </tr>
+          )}
+          {letterNoSearch && letterByNo?.letterNo && (
+            <tr>
+              <td className="border border-gray-400 px-1 py-0">{letterByNo.letterNo}</td>
+              <td className="border border-gray-400 px-1 py-0">{letterByNo.fromDepartment.name}</td>
+              <td className="border border-gray-400 px-1 py-0">{letterByNo.toDepartment.name}</td>
+              <td className="border border-gray-400 px-1 py-0">{letterByNo.importanceDegree.name}</td>
+              <td className="cursor-pointer border border-gray-400 px-1 py-0">
+                {letterByNo.createdBy.firstName} {letterByNo.createdBy.lastName}{' '}
+                {letterByNo.createdBy.fatherName}
+              </td>
+              <td className="border border-gray-400 px-1 py-0">{letterByNo.date}</td>
+              <td className="border border-gray-400 px-1 py-0">{letterByNo.note}</td>
             </tr>
           )}
         </tbody>
