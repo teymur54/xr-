@@ -52,6 +52,14 @@ const AllLetters = () => {
     enabled: !!jwtToken,
   })
 
+  useEffect(() => {
+    setSearch('')
+    setLetterNoSearch('')
+    setFromDepartment('')
+    setToDepartment('')
+    setUser('')
+  }, [apiCall])
+
   const { data: departments } = useQuery({
     queryKey: ['departments', jwtToken],
     queryFn: () => getAllDepartments(jwtToken),
