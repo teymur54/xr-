@@ -126,7 +126,7 @@ const AllLetters = () => {
       borderWidth: '2px',
       borderRadius: '30px',
       transition: 'border-color 0.2s ease',
-      backgroundColor: '#f6e05e',
+      backgroundColor: '#FEF08A',
       '&:hover': {
         borderColor: 'rgb(29, 78, 216)',
       },
@@ -157,7 +157,9 @@ const AllLetters = () => {
               type="number"
               value={letterNoSearch}
               placeholder="0"
-              onChange={(e) => setLetterNoSearch(e.target.value.replace(/\D/g, ''))}
+              onChange={(e) => {
+                setLetterNoSearch(e.target.value.replace(/\D/g, ''))
+              }}
               className="ml-2 rounded-lg border border-gray-500 bg-yellow-200 pl-2 text-darkblue-400"
             />
             <button
